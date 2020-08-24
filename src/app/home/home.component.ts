@@ -2,7 +2,9 @@ import { Component, OnInit, ViewEncapsulation } from '@angular/core';
 import { Router } from '@angular/router';
 import { NgbDateStruct, NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { ElectronService } from 'app/core/services';
-
+import { PulserService } from 'app/core/services/pulser.service';
+import { UrlModel } from '../core/models/url.model';
+import { Subscription } from 'rxjs';
 @Component({
   selector: 'app-home',
   templateUrl: './home.component.html',
@@ -11,34 +13,25 @@ import { ElectronService } from 'app/core/services';
 })
 export class HomeComponent implements OnInit {
 
-  public _showWelcomeMessage : boolean = true;
-  public _dateModel: NgbDateStruct;
+  public _showWelcomeMessage : boolean = true; 
   public _opened : boolean = false;
+  public _newUrl : string;
 
   constructor(private router: Router,private modalService: NgbModal,
-    public electronService : ElectronService) { }
+    public electronService : ElectronService,
+    public pulserService : PulserService) { }
+    public addedUrls :  UrlModel[] = [];
+    public subscriptions : Subscription[] = [];
 
   ngOnInit(): void { 
-
-
-    var date = new Date();
-    this._dateModel = 
-    { day: date.getUTCDate(), month: date.getUTCMonth() + 1, year: date.getUTCFullYear()};
-
-
+ 
       setTimeout(()=>{
         this._showWelcomeMessage = false;
-      },10000)
-
+      },10000);
+ 
   }
 
-  openBackDropCustomClass(content) {
-    this.modalService.open(content, 
-      {
-        backdrop : 'static',
-        backdropClass: 'light-blue-backdrop'
-    });
-  }
+   
 
   enlargeWindow()
   {
@@ -52,6 +45,35 @@ export class HomeComponent implements OnInit {
     this.electronService.window.setSize(343,115);
 
   }
+
+  
+  public addUrl()
+  {
+    let elem = {url : this._newUrl, available : false, lastAvailability : null};
+
+    this.addedUrls.push(elem);
+    this.subscriptions.push(this.pulserService.startCheckingUrl(this._newUrl).asObservable()
+      .subscribe(evt => {
+        if("OK" == evt)
+        {
+          elem.available = true;
+          elem.lastAvailability = new Date();
+        } 
+        else{
+          elem.available = false;
+        }
+
+      }));
+  }
+
+  public removeUrl(idx:number)
+  {
+    this.pulserService.stopCheckingUrl(idx);
+    this.addedUrls.splice(idx,1);
+    this.subscriptions[idx].unsubscribe();
+  }
+
+
 
 
   

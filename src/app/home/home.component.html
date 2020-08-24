@@ -14,10 +14,10 @@
 
         <div class="input-group">
            
-          <input type="email" class="form-control"  placeholder="http://hello.world">
+          <input type="email" class="form-control" [(ngModel)]="_newUrl" placeholder="http://hello.world" [ngModelOptions]="{standalone: true}">
           <div class="input-group-append"  >
             <button id="addButton" class="btn btn-sm btn-outline-secondary ml-2" type="button"  >
-              <svg width="1.5em" height="1.5em" viewBox="0 0 16 16" class="bi bi-plus text-light" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
+              <svg width="1.5em" height="1.5em" viewBox="0 0 16 16" class="bi bi-plus text-light" fill="currentColor" xmlns="http://www.w3.org/2000/svg" (click)="addUrl()">
                 <path fill-rule="evenodd" d="M8 3.5a.5.5 0 0 1 .5.5v4a.5.5 0 0 1-.5.5H4a.5.5 0 0 1 0-1h3.5V4a.5.5 0 0 1 .5-.5z"/>
                 <path fill-rule="evenodd" d="M7.5 8a.5.5 0 0 1 .5-.5h4a.5.5 0 0 1 0 1H8.5V12a.5.5 0 0 1-1 0V8z"/>
               </svg>
@@ -44,12 +44,18 @@
           </div>
 
         </div>
- 
-
-      </div>
+  
+      </div> 
     </form>
 
+    <hr/>
 
+    <ngb-alert *ngFor="let urlElm of addedUrls; let idx = index;"  
+      [type]="urlElm.available ? 'success' : 'danger'" 
+      (close)="removeUrl(idx)"
+      [dismissible]="true" >
+      <strong>{{urlElm.url}}</strong>
+    </ngb-alert>
 
 
   </ng-container>
