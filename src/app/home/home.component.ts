@@ -23,14 +23,14 @@ export class HomeComponent implements OnInit {
         // where the sketch is displayed
         canvas2.parent('sketch-holder');
      
-        s.background(255);
+        s.background("#1A2933");
        
       
       };
      
       s.draw = () => {
        
-        s.background(255);
+        s.background("#1A2933");
         s.stroke(0,120);
         s.ellipse(s.mouseX,s.mouseY,30,30);
       };
