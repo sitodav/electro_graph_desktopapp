@@ -6,11 +6,12 @@ import { HomeComponent } from './home.component';
 import { SharedModule } from '../shared/shared.module'; 
 import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
 import { NavbarComponent } from '../navbar/navbar.component'
+import { AngularSplitModule } from 'angular-split';
 
 @NgModule({
   declarations: [HomeComponent, NavbarComponent ],
   imports: [CommonModule, SharedModule, HomeRoutingModule,
-  
+    AngularSplitModule,
     NgbModule]
 })
 export class HomeModule {}

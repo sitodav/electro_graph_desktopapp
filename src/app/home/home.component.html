@@ -1,7 +1,15 @@
 <app-navbar></app-navbar>
-<div id="main" >
+<div id="main">
+    <!--angular split per avere split pane-->
+    <as-split direction="horizontal" [gutterSize]="1">
+        <as-split-area  [size]="80"> <!--primo split pane--> 
+            <div id="sketch-holder"></div>   <!-- qui viene sparato lo sketch-->
+        </as-split-area>
+        <as-split-area [size]="20"> <!--secondo split pane-->
+            <p> CIPOLLE, TANTE CIPOLLE QUI </p> <!--qui ci mettiamo i grafi-->
+        </as-split-area>
+    </as-split>
 
+   
 
-          <div id="sketch-holder"></div>
- 
 </div>
