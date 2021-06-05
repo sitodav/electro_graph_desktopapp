@@ -23,7 +23,7 @@
               "src/styles.scss",
               "node_modules/@angular/material/prebuilt-themes/indigo-pink.css"
             ],
-            "scripts": [],
+            "scripts": ["./node_modules/p5/lib/p5.min.js"],
             "customWebpackConfig": {
               "path": "./angular.webpack.js"
             }

@@ -1,81 +1,54 @@
-import { Component, OnInit, ViewEncapsulation } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
-import { NgbDateStruct, NgbModal } from '@ng-bootstrap/ng-bootstrap';
-import { ElectronService } from 'app/core/services';
-import { PulserService } from 'app/core/services/pulser.service';
-import { UrlModel } from '../core/models/url.model';
-import { Subscription } from 'rxjs';
+import * as p5 from 'p5';
+
+
 @Component({
   selector: 'app-home',
   templateUrl: './home.component.html',
-  encapsulation: ViewEncapsulation.None,
   styleUrls: ['./home.component.scss']
 })
 export class HomeComponent implements OnInit {
 
-  public _showWelcomeMessage : boolean = true; 
-  public _opened : boolean = false;
-  public _newUrl : string;
-
-  constructor(private router: Router,private modalService: NgbModal,
-    public electronService : ElectronService,
-    public pulserService : PulserService) { }
-    public addedUrls :  UrlModel[] = [];
-    public subscriptions : Subscription[] = [];
+  canvas;
+  constructor(private router: Router) { }
 
   ngOnInit(): void { 
- 
-      setTimeout(()=>{
-        this._showWelcomeMessage = false;
-      },10000);
- 
+
+
+    const sketch = s => {
+      s.setup = () => {
+        let canvas2 = s.createCanvas(s.windowWidth - 200, s.windowHeight - 200);
+        // creating a reference to the div here positions it so you can put things above and below
+        // where the sketch is displayed
+        canvas2.parent('sketch-holder');
+     
+        s.background(255);
+       
+      
+      };
+     
+      s.draw = () => {
+       
+        s.background(255);
+        s.stroke(0,120);
+        s.ellipse(s.mouseX,s.mouseY,30,30);
+      };
+     
+      s.mouseReleased = () => {
+        console.log("hello");
+      };
+     
+      s.keyPressed = () => {
+         console.log("hello");
+      };
+    };
+     
+    this.canvas = new p5(sketch);
+
+
+
+
   }
-
-   
-
-  enlargeWindow()
-  {
-    this._opened = true;
-    this.electronService.window.setSize(343,800);
-  }
-
-  shrinkWindow()
-  {
-    this._opened = false;
-    this.electronService.window.setSize(343,115);
-
-  }
-
-  
-  public addUrl()
-  {
-    let elem = {url : this._newUrl, available : false, lastAvailability : null};
-
-    this.addedUrls.push(elem);
-    this.subscriptions.push(this.pulserService.startCheckingUrl(this._newUrl).asObservable()
-      .subscribe(evt => {
-        if("OK" == evt)
-        {
-          elem.available = true;
-          elem.lastAvailability = new Date();
-        } 
-        else{
-          elem.available = false;
-        }
-
-      }));
-  }
-
-  public removeUrl(idx:number)
-  {
-    this.pulserService.stopCheckingUrl(idx);
-    this.addedUrls.splice(idx,1);
-    this.subscriptions[idx].unsubscribe();
-  }
-
-
-
-
-  
 
 }
