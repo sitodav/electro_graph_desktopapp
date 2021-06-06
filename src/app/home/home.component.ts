@@ -1,5 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
+import { ElectronService } from 'app/core/services';
+import { BrowserWindow } from 'electron';
 import * as p5 from 'p5';
 import rough from 'roughjs/bundled/rough.cjs';
 import { Elementt } from "./elementt.class";
@@ -13,8 +15,10 @@ import { Elementt } from "./elementt.class";
 })
 export class HomeComponent implements OnInit {
 
-  canvas;
-  constructor(private router: Router) { }
+  p5wrapper;
+  electronWindow: BrowserWindow;
+
+  constructor(private router: Router, public electroService: ElectronService) { }
 
   ngOnInit(): void {
     /*
@@ -23,8 +27,28 @@ export class HomeComponent implements OnInit {
       Tutte le funzioni classiche di p5js devono essere chiamate sulla variabile
       che mantiene lo sketch
     */
-    this.canvas = new p5(this._thisissketch);
+    this.p5wrapper = new p5(this._thisissketch);
     this.initVariabiliGlobaliP5();
+
+    // /*visto che nello sketch, per collegare resize electron window ale resize dello sketch p5js
+    // devo avere puntamento alla window,
+    // l'electron service non e' immediato, quindi l'inizializzazione di p5js deve essere successiva
+    // alla risoluzione dell'electron service*/
+    // new Promise(() => {
+    //   setTimeout(() => {
+    //     console.log("INIZIALIZZO SKETCH P5JS E VARIABILI GLOBALI")
+    //     this.electronWindow = this.electroService.window;
+
+
+    //   }, 2000);
+    // }).then(() => {
+
+    //   this.p5wrapper = new p5(this._thisissketch);
+    //   this.initVariabiliGlobaliP5();
+
+    // })
+
+ 
 
   }
 
@@ -32,9 +56,10 @@ export class HomeComponent implements OnInit {
   public _thisissketch = (s) => {
     //p5js setup function
     s.setup = () => {
-      let canvas2 = s.createCanvas(s.windowWidth - 200, s.windowHeight - 200);
+      let canvas2 = s.createCanvas(s.windowWidth - 180, s.windowHeight - 45);
       canvas2.parent('sketch-holder'); //questo lo aggancia al template angular 
       s.background("#070e13"); //background come quello del container electron
+
 
       this.lastClick = s.millis();//Math.floor(Date.now() / 1000);
       //inizializzo roughjs installato come dipendenza
@@ -45,6 +70,8 @@ export class HomeComponent implements OnInit {
       s.textAlign(s.CENTER, s.CENTER);
       this.sketchRef = s;
     };
+
+  
 
     //p5js draw function
     s.draw = () => {
@@ -100,7 +127,7 @@ export class HomeComponent implements OnInit {
       if (amInExisting)
         return;
       console.log("creo invece nuova root");
-      let newRoot = Elementt._builder(s.createVector(s.mouseX, s.mouseY), 35, "", "", this.sketchRef, this.rc, this.palettes, this);
+      let newRoot = Elementt._builder(s.createVector(s.mouseX, s.mouseY), 50, "", "", this.sketchRef, this.rc, this.palettes, this);
       //this.createElementt(s.createVector(s.mouseX, s.mouseY), 35, "", "");
       newRoot.isRoot = true;
 
@@ -138,10 +165,10 @@ export class HomeComponent implements OnInit {
       console.log("mouse pressed");
       if (this.DOUBLE_CLICKED || this.ININPUT)
         return;
-      
+
       for (let i in this.roots) {
         let found = this.roots[i]._checkMouseIn(s.mouseX, s.mouseY);
-        console.log("trovato uno in cui sono "+found);
+        console.log("trovato uno in cui sono " + found);
         if (null != found) {
           if (this.ISSHIFT_DOWN) {
             found.showInput = true;
@@ -168,14 +195,14 @@ export class HomeComponent implements OnInit {
           if (null == found || found.isDragged)
             continue;
           let target = found;
-           
+
 
           if (target.figli.length == 0) {
             target.isRoot = false;
             this.dragged.isRoot = false;
             let oldPadreTarget = target.padre;
             let oldPadreDragged = this.dragged.padre;
-            let newPadre = Elementt._builder(target.center.copy(), 40, "group" + (s.frameCount % 1000), "", this.sketchRef, this.rc, this.palettes, this);
+            let newPadre = Elementt._builder(target.center.copy(), 75, "group" + (s.frameCount % 1000), "", this.sketchRef, this.rc, this.palettes, this);
             //this.createElementt(target.center.copy(), 40, "group" + (s.frameCount % 1000), "");
 
             let oldTargetOrder = target.orderInPadre;

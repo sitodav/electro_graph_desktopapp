@@ -71,7 +71,7 @@ export class Elementt {
 
             this.rcRef.line(this.padre.center.x, this.padre.center.y, this.center.x, this.center.y, {
                 seed: 1,
-                stroke: this.figli.length > 0 ? "#000000" : this.myColor, strokeLineDash: [5, 10]
+                stroke: this.figli.length > 0 ?  this.myColor : this.myColor, strokeLineDash: [5, 10]
             });
             /*rc.line(_this.padre.center.x, _this.padre.center.y, _this.center.x, _this.center.y,
                     {stroke: _this.padre.myColor,
@@ -100,9 +100,9 @@ export class Elementt {
             seed: 1,
             stroke: this.figli.length > 0 ? "#000000" : this.myColor,
         });
-        this.sketchRef.fill(0, 255);
+        this.sketchRef.fill(255, 255);
         this.sketchRef.textSize(12);
-        this.sketchRef.stroke(0, 255);
+        this.sketchRef.stroke(255, 255);
         this.sketchRef.text(this.text, 0, 0);
         this.sketchRef.pop();
     }
@@ -129,7 +129,7 @@ export class Elementt {
     public _applyChildStartPos = () => {
         for (let i in this.figli) {
 
-            let childRay = this.sketchRef.max(this.ray, this.figli[i].figli.length * 25); //map(_this.figli[i].figli.length, 0,5,1.5*_this.ray,20);
+            let childRay = this.sketchRef.max(this.ray, this.figli[i].figli.length * 30); //map(_this.figli[i].figli.length, 0,5,1.5*_this.ray,20);
             let anglePorz = (this.figli[i].orderInPadre) * this.sketchRef.TWO_PI / this.sketchRef.max(6, this.figli.length);
 
             this.figli[i].goToCenter = this.sketchRef.createVector(this.goToCenter.x + childRay * this.sketchRef.cos(anglePorz),
@@ -139,7 +139,7 @@ export class Elementt {
     }
 
     public _updateRay = () => {
-        this.ray = this.sketchRef.max(35, 20 * this.figli.length);
+        this.ray = this.sketchRef.max(50, 30 * this.figli.length);
         for (let i in this.figli) {
             this.figli[i]._updateRay();
         }

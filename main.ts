@@ -16,8 +16,8 @@ function createWindow(): BrowserWindow {
   win = new BrowserWindow({
     x: 0,
     y: 0,
-    width: 450,
-    height: 200,
+    width: 1600,
+    height: 700,
     backgroundColor: '#FFF',
     webPreferences: {
       nodeIntegration: true,
@@ -26,9 +26,12 @@ function createWindow(): BrowserWindow {
     frame: false
   });
 
+  win.setResizable(false);
+ 
+
   if (serve) {
-    
-    win.webContents.openDevTools();
+
+    // win.webContents.openDevTools();
 
     require('electron-reload')(__dirname, {
       electron: require(`${__dirname}/node_modules/electron`)
@@ -51,14 +54,14 @@ function createWindow(): BrowserWindow {
     win = null;
   });
 
- 
+
   return win;
 }
 
 try {
 
   app.allowRendererProcessReuse = true;
-  
+
   // This method will be called when Electron has finished
   // initialization and is ready to create browser windows.
   // Some APIs can only be used after this event occurs.
@@ -84,9 +87,9 @@ try {
     }
   });
 
-  
 
-  
+
+
 
 } catch (e) {
   // Catch Error
@@ -97,6 +100,6 @@ try {
 
 
 
- 
- 
+
+
 
