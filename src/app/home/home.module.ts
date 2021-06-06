@@ -7,10 +7,12 @@ import { SharedModule } from '../shared/shared.module';
 import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
 import { NavbarComponent } from '../navbar/navbar.component'
 import { AngularSplitModule } from 'angular-split';
+import { RightpaneComponent } from './rightpane/rightpane.component';
+import { BrowserModule } from '@angular/platform-browser';
 
 @NgModule({
-  declarations: [HomeComponent, NavbarComponent ],
-  imports: [CommonModule, SharedModule, HomeRoutingModule,
+  declarations: [HomeComponent, NavbarComponent, RightpaneComponent ],
+  imports: [CommonModule, SharedModule, HomeRoutingModule, BrowserModule,
     AngularSplitModule,
     NgbModule]
 })

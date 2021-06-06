@@ -103,12 +103,12 @@ export class Elementt {
         this.sketchRef.fill(255, 255);
         this.sketchRef.textSize(12);
         this.sketchRef.stroke(255, 255);
-        this.sketchRef.text(this.text, 0, 0);
+        this.sketchRef.text(this.label, 0, 0);
         this.sketchRef.pop();
     }
 
     public _checkMouseIn = (x, y) => {
-        console.log("__checkMouseIn");
+       
         if (this.espanso && this.figli.length > 0) {
             for (let i in this.figli) {
                 let found = this.figli[i]._checkMouseIn(x, y);
@@ -119,7 +119,7 @@ export class Elementt {
         }
         
         if (this.sketchRef.createVector(this.center.x - x, this.center.y - y).mag() < 0.5 * this.ray) {
-            console.log("__checkMouseIn no figli "+ (this.sketchRef.createVector(this.center.x - x, this.center.y - y).mag() )+","+( 0.5 * this.ray));
+            
             return this;
             
         }
@@ -175,7 +175,7 @@ export class Elementt {
         sketchRef, rcRef, colorPalettes, mainClassRef): Elementt => {
 
         if (!sketchRef) {
-            console.log("this.sketchRef is undefined");
+          
             return;
         }
         let nuovoElemento = new Elementt(center, ray, text, label, sketchRef, rcRef, colorPalettes, mainClassRef);

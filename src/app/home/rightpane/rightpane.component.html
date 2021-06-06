@@ -1,0 +1,16 @@
+<ngb-accordion #acc="ngbAccordion" [closeOthers]="true">
+    <ngb-panel *ngFor="let elm of elementi" id="{{elm.label}}" >
+        <ng-template ngbPanelHeader>
+            <div class="d-flex align-items-center justify-content-between">
+                <button class="error" ngbPanelToggle class="btn container-fluid text-left pl-0">{{elm.label}}</button>
+            </div>
+        </ng-template>
+        <ng-template ngbPanelContent>
+            {{elm.text}}
+        </ng-template>
+    </ngb-panel>
+    <hr />
+
+
+    <!-- <button class="btn btn-sm btn-outline-primary mr-2" (click)="acc.toggle('toggle-1')">Toggle first</button>
+  <button class="btn btn-sm btn-outline-primary mr-2" (click)="acc.toggle('toggle-2')">Toggle second</button> -->

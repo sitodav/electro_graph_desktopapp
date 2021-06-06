@@ -1,10 +1,12 @@
-import { Component, OnInit } from '@angular/core';
+import { RightpaneComponent } from './rightpane/rightpane.component';
+import { Component, OnInit, ViewChild } from '@angular/core';
 import { Router } from '@angular/router';
 import { ElectronService } from 'app/core/services';
 import { BrowserWindow } from 'electron';
 import * as p5 from 'p5';
 import rough from 'roughjs/bundled/rough.cjs';
 import { Elementt } from "./elementt.class";
+import { ElementiService } from './elementiservice/elementi.service';
 
 
 
@@ -18,7 +20,11 @@ export class HomeComponent implements OnInit {
   p5wrapper;
   electronWindow: BrowserWindow;
 
-  constructor(private router: Router, public electroService: ElectronService) { }
+  @ViewChild(RightpaneComponent)
+  rightPaneComponent: RightpaneComponent;
+
+  constructor(private router: Router, public electroService: ElectronService,
+    public elementiService : ElementiService) { }
 
   ngOnInit(): void {
     /*
@@ -63,7 +69,7 @@ export class HomeComponent implements OnInit {
 
       this.lastClick = s.millis();//Math.floor(Date.now() / 1000);
       //inizializzo roughjs installato come dipendenza
-      console.log("rough: " + rough);
+      
       this.rc = rough.canvas(document.getElementById('defaultCanvas0') as HTMLCanvasElement);
 
       s.textSize(10);
@@ -123,11 +129,12 @@ export class HomeComponent implements OnInit {
         if (found)
           break;
       }
-      console.log("found is true ");
+     
       if (amInExisting)
         return;
-      console.log("creo invece nuova root");
-      let newRoot = Elementt._builder(s.createVector(s.mouseX, s.mouseY), 50, "", "", this.sketchRef, this.rc, this.palettes, this);
+     
+      let newRoot = Elementt._builder(s.createVector(s.mouseX, s.mouseY), 50, "contenuto "+(s.frameCount % 1000), 
+      "nodo singolo "+(s.frameCount % 1000), this.sketchRef, this.rc, this.palettes, this);
       //this.createElementt(s.createVector(s.mouseX, s.mouseY), 35, "", "");
       newRoot.isRoot = true;
 
@@ -145,7 +152,7 @@ export class HomeComponent implements OnInit {
     s.mouseDragged = () => {
       if (this.DOUBLE_CLICKED || this.ININPUT)
         return;
-      console.log("mouse dragged");
+      
       if (null != this.dragged) {
         this.dragged.center = s.createVector(s.mouseX, s.mouseY);
         this.dragged.goToCenter = this.dragged.center.copy();
@@ -155,20 +162,20 @@ export class HomeComponent implements OnInit {
 
 
     s.mousePressed = () => {
-      console.log("mouse pressed");
+   
       let millisT = s.millis(); //Math.floor(Date.now() / 1000);
       if (millisT - this.lastClick < 200)
         this.DOUBLE_CLICKED = true;
       else this.DOUBLE_CLICKED = false;
 
       this.lastClick = s.millis();//Math.floor(Date.now() / 1000);
-      console.log("mouse pressed");
+     
       if (this.DOUBLE_CLICKED || this.ININPUT)
         return;
 
       for (let i in this.roots) {
         let found = this.roots[i]._checkMouseIn(s.mouseX, s.mouseY);
-        console.log("trovato uno in cui sono " + found);
+       
         if (null != found) {
           if (this.ISSHIFT_DOWN) {
             found.showInput = true;
@@ -202,7 +209,8 @@ export class HomeComponent implements OnInit {
             this.dragged.isRoot = false;
             let oldPadreTarget = target.padre;
             let oldPadreDragged = this.dragged.padre;
-            let newPadre = Elementt._builder(target.center.copy(), 75, "group" + (s.frameCount % 1000), "", this.sketchRef, this.rc, this.palettes, this);
+            let newPadre = Elementt._builder(target.center.copy(), 75, "contenuto "+(s.frameCount % 1000), 
+            "gruppo "+(s.frameCount % 1000), this.sketchRef, this.rc, this.palettes, this);
             //this.createElementt(target.center.copy(), 40, "group" + (s.frameCount % 1000), "");
 
             let oldTargetOrder = target.orderInPadre;
@@ -275,7 +283,7 @@ export class HomeComponent implements OnInit {
   palettes;
   rc;
   dragged = null;
-  roots = [];
+  roots:Elementt[] = [];
   lastClick = 0;
   DOUBLE_CLICKED = false;
   allInputs = [];
@@ -317,8 +325,9 @@ export class HomeComponent implements OnInit {
         found.espanso = !found.espanso;
 
         if (found.espanso) {
-          found._applyChildStartPos();
+          found._applyChildStartPos(); 
         }
+        this.rightPaneComponent.identificaElemento(found.label);
         return;
       }
     }
@@ -331,6 +340,7 @@ export class HomeComponent implements OnInit {
         els.splice(i, 1);
       }
     }
+    this.elementiService.aggiornaElementi(els);
   }
 
 
@@ -342,7 +352,7 @@ export class HomeComponent implements OnInit {
       this.roots[i]._giveChildNewColor();
     }
     this.roots = newRoots;
-
+    this.elementiService.aggiornaElementi(this.roots);
   }
 
 
@@ -365,12 +375,7 @@ export class HomeComponent implements OnInit {
     }
   }
 
-  private printAll = () => {
-    console.log("_------------------------------------------------------------------------------");
-    for (let i in this.roots) {
-      this.roots[i]._printMe();
-    }
-  }
+   
 
   /*funzione builder oggetto di una classe
   che non e' una classe, ma e' modellato come js plain object
