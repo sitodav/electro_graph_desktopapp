@@ -1,0 +1,26 @@
+<!-- <ngb-accordion #acc="ngbAccordion" [closeOthers]="true">
+    <ngb-panel *ngFor="let elm of elementi" id="{{elm.label}}" >
+        <ng-template ngbPanelHeader>
+            <div class="d-flex align-items-center justify-content-between">
+                <button class="error" ngbPanelToggle class="btn container-fluid text-left pl-0">{{elm.label}}</button>
+            </div>
+        </ng-template>
+        <ng-template ngbPanelContent>
+            {{elm.text}}
+        </ng-template>
+    </ngb-panel>
+    <hr />
+</ngb-accordion>  -->
+
+    <!-- <button class="btn btn-sm btn-outline-primary mr-2" (click)="acc.toggle('toggle-1')">Toggle first</button>
+  <button class="btn btn-sm btn-outline-primary mr-2" (click)="acc.toggle('toggle-2')">Toggle second</button> -->
+
+
+  <!-- <div class="container-fluid"> -->
+    <button *ngFor="let elm of elementi" type="button" [ngStyle]="{'border-color': 'white', 'background-color': elm.myColor }" 
+    style="max-width:130px; min-width:130px; margin:1px;  opacity:0.7; font-size:18px;"
+      class="btn-sm float-center" [ngClass]="{selezionato : elm.isDragged}"> {{elm.label}}</button>
+  <!-- </div> -->
+
+ 
+ 

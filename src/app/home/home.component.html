@@ -1,12 +1,32 @@
 <app-navbar></app-navbar>
 <div id="main">
     <!--angular split per avere split pane-->
-    <as-split direction="horizontal" [gutterSize]="1">
-        <as-split-area  [size]="85"> <!--primo split pane--> 
-            <div id="sketch-holder"></div>   <!-- qui viene sparato lo sketch-->
+    <as-split direction="vertical" [gutterSize]="1">
+        <as-split-area  [size]="80"> <!--primo split pane ALTO--> 
+
+            <as-split direction="horizontal" [gutterSize]="1"> <!--SPLIT PANE SINISTRA-->
+                <as-split-area  [size]="90"> <!--primo split pane--> 
+                    <div id="sketch-holder"></div>   <!-- qui viene sparato lo sketch-->
+                </as-split-area>
+                <as-split-area class="rightwrapper" [size]="10"> <!--SPLIT PANE DESTRA-->
+                   <app-rightpane></app-rightpane>
+                </as-split-area>
+            </as-split>
+ 
         </as-split-area>
-        <as-split-area [size]="15"> <!--secondo split pane-->
-           <app-rightpane></app-rightpane>
+        <as-split-area [size]="20"> <!--secondo split pane BASSO-->
+           
+
+           <as-split direction="horizontal" [gutterSize]="1"> <!--SPLIT PANE SINISTRA-->
+            <as-split-area  [size]="90"> <!--primo split pane--> 
+                <app-downpane></app-downpane>
+            </as-split-area>
+            <as-split-area  class="rightwrapper" [size]="10" > <!--SPLIT PANE DESTRA-->
+                
+            </as-split-area>
+        </as-split>
+
+
         </as-split-area>
     </as-split>
 

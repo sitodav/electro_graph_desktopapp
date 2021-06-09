@@ -1,4 +1,4 @@
-import { RightpaneComponent } from './rightpane/rightpane.component';
+import { DownpaneComponent } from './downpane/downpane.component';
 import { Component, OnInit, ViewChild } from '@angular/core';
 import { Router } from '@angular/router';
 import { ElectronService } from 'app/core/services';
@@ -20,8 +20,8 @@ export class HomeComponent implements OnInit {
   p5wrapper;
   electronWindow: BrowserWindow;
 
-  @ViewChild(RightpaneComponent)
-  rightPaneComponent: RightpaneComponent;
+  @ViewChild(DownpaneComponent)
+  downpaneComponent: DownpaneComponent;
 
   constructor(private router: Router, public electroService: ElectronService,
     public elementiService : ElementiService) { }
@@ -64,7 +64,7 @@ export class HomeComponent implements OnInit {
     s.setup = () => {
       let canvas2 = s.createCanvas(s.windowWidth - 180, s.windowHeight - 45);
       canvas2.parent('sketch-holder'); //questo lo aggancia al template angular 
-      s.background("#070e13"); //background come quello del container electron
+      s.background("#ffffff"); //background come quello del container electron
 
 
       this.lastClick = s.millis();//Math.floor(Date.now() / 1000);
@@ -87,7 +87,7 @@ export class HomeComponent implements OnInit {
         this.customDoubleClick();
         this.DOUBLE_CLICKED = false;
       }
-      s.background("#070e13");
+      s.background("#ffffff");
       for (let i in this.roots) {
         this.roots[i]._draw();
       }
@@ -134,7 +134,7 @@ export class HomeComponent implements OnInit {
         return;
      
       let newRoot = Elementt._builder(s.createVector(s.mouseX, s.mouseY), 50, "contenuto "+(s.frameCount % 1000), 
-      "nodo singolo "+(s.frameCount % 1000), this.sketchRef, this.rc, this.palettes, this);
+      "singolo "+(s.frameCount % 1000), this.sketchRef, this.rc, this.palettes, this);
       //this.createElementt(s.createVector(s.mouseX, s.mouseY), 35, "", "");
       newRoot.isRoot = true;
 
@@ -327,7 +327,7 @@ export class HomeComponent implements OnInit {
         if (found.espanso) {
           found._applyChildStartPos(); 
         }
-        this.rightPaneComponent.identificaElemento(found.label);
+        this.downpaneComponent.identificaElemento(found.label);
         return;
       }
     }

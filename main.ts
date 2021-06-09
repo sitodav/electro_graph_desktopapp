@@ -16,8 +16,8 @@ function createWindow(): BrowserWindow {
   win = new BrowserWindow({
     x: 0,
     y: 0,
-    width: 1600,
-    height: 700,
+    width: 1700,
+    height: 800,
     backgroundColor: '#FFF',
     webPreferences: {
       nodeIntegration: true,
@@ -31,7 +31,7 @@ function createWindow(): BrowserWindow {
 
   if (serve) {
 
-    // win.webContents.openDevTools();
+    win.webContents.openDevTools();
 
     require('electron-reload')(__dirname, {
       electron: require(`${__dirname}/node_modules/electron`)

@@ -100,9 +100,9 @@ export class Elementt {
             seed: 1,
             stroke: this.figli.length > 0 ? "#000000" : this.myColor,
         });
-        this.sketchRef.fill(255, 255);
+        this.sketchRef.fill(0, 255);
         this.sketchRef.textSize(12);
-        this.sketchRef.stroke(255, 255);
+        this.sketchRef.stroke(0, 255);
         this.sketchRef.text(this.label, 0, 0);
         this.sketchRef.pop();
     }
