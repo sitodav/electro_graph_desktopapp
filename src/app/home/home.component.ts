@@ -24,7 +24,7 @@ export class HomeComponent implements OnInit {
   downpaneComponent: DownpaneComponent;
 
   constructor(private router: Router, public electroService: ElectronService,
-    public elementiService : ElementiService) { }
+    public elementiService: ElementiService) { }
 
   ngOnInit(): void {
     /*
@@ -54,7 +54,7 @@ export class HomeComponent implements OnInit {
 
     // })
 
- 
+
 
   }
 
@@ -62,14 +62,14 @@ export class HomeComponent implements OnInit {
   public _thisissketch = (s) => {
     //p5js setup function
     s.setup = () => {
-      let canvas2 = s.createCanvas(s.windowWidth - 180, s.windowHeight - 45);
+      let canvas2 = s.createCanvas(s.windowWidth - 180, s.windowHeight - 200);
       canvas2.parent('sketch-holder'); //questo lo aggancia al template angular 
       s.background("#ffffff"); //background come quello del container electron
 
 
       this.lastClick = s.millis();//Math.floor(Date.now() / 1000);
       //inizializzo roughjs installato come dipendenza
-      
+
       this.rc = rough.canvas(document.getElementById('defaultCanvas0') as HTMLCanvasElement);
 
       s.textSize(10);
@@ -77,7 +77,7 @@ export class HomeComponent implements OnInit {
       this.sketchRef = s;
     };
 
-  
+
 
     //p5js draw function
     s.draw = () => {
@@ -116,8 +116,13 @@ export class HomeComponent implements OnInit {
       this.ISSHIFT_DOWN = false;
     }
 
+   
 
     s.mouseClicked = () => {
+      if(!this.inSketch(s.mouseX,s.mouseY,this.sketchRef))
+      {
+        return ;
+      }
       if (this.DOUBLE_CLICKED || this.ININPUT)
         return;
 
@@ -129,12 +134,12 @@ export class HomeComponent implements OnInit {
         if (found)
           break;
       }
-     
+
       if (amInExisting)
         return;
-     
-      let newRoot = Elementt._builder(s.createVector(s.mouseX, s.mouseY), 50, "contenuto "+(s.frameCount % 1000), 
-      "singolo "+(s.frameCount % 1000), this.sketchRef, this.rc, this.palettes, this);
+
+      let newRoot = Elementt._builder(s.createVector(s.mouseX, s.mouseY), 50, "contenuto " + (s.frameCount % 1000),
+        "singolo " + (s.frameCount % 1000), this.sketchRef, this.rc, this.palettes, this);
       //this.createElementt(s.createVector(s.mouseX, s.mouseY), 35, "", "");
       newRoot.isRoot = true;
 
@@ -152,7 +157,7 @@ export class HomeComponent implements OnInit {
     s.mouseDragged = () => {
       if (this.DOUBLE_CLICKED || this.ININPUT)
         return;
-      
+
       if (null != this.dragged) {
         this.dragged.center = s.createVector(s.mouseX, s.mouseY);
         this.dragged.goToCenter = this.dragged.center.copy();
@@ -162,20 +167,20 @@ export class HomeComponent implements OnInit {
 
 
     s.mousePressed = () => {
-   
+
       let millisT = s.millis(); //Math.floor(Date.now() / 1000);
       if (millisT - this.lastClick < 200)
         this.DOUBLE_CLICKED = true;
       else this.DOUBLE_CLICKED = false;
 
       this.lastClick = s.millis();//Math.floor(Date.now() / 1000);
-     
+
       if (this.DOUBLE_CLICKED || this.ININPUT)
         return;
 
       for (let i in this.roots) {
         let found = this.roots[i]._checkMouseIn(s.mouseX, s.mouseY);
-       
+
         if (null != found) {
           if (this.ISSHIFT_DOWN) {
             found.showInput = true;
@@ -209,8 +214,8 @@ export class HomeComponent implements OnInit {
             this.dragged.isRoot = false;
             let oldPadreTarget = target.padre;
             let oldPadreDragged = this.dragged.padre;
-            let newPadre = Elementt._builder(target.center.copy(), 75, "contenuto "+(s.frameCount % 1000), 
-            "gruppo "+(s.frameCount % 1000), this.sketchRef, this.rc, this.palettes, this);
+            let newPadre = Elementt._builder(target.center.copy(), 75, "contenuto " + (s.frameCount % 1000),
+              "gruppo " + (s.frameCount % 1000), this.sketchRef, this.rc, this.palettes, this);
             //this.createElementt(target.center.copy(), 40, "group" + (s.frameCount % 1000), "");
 
             let oldTargetOrder = target.orderInPadre;
@@ -276,6 +281,31 @@ export class HomeComponent implements OnInit {
 
   }
 
+
+  private inSketch(mouseX,mouseY,sketchRef) : boolean
+  {
+    // console.log(mouseX,mouseY,sketchRef.width,sketchRef.height);
+    return mouseX < sketchRef.width && mouseY < sketchRef.height;
+    
+  }
+
+  public espandiTutti = () =>
+  {
+    for (let elm of this.roots) {
+      if(!elm.espanso)
+        this.simulateCustomDoubleClick(elm.label);
+    }
+  }
+
+  public chiudiTutti = () =>
+  {
+    for (let elm of this.roots) {
+      if(elm.espanso)
+        this.simulateCustomDoubleClick(elm.label);
+    }
+  }
+
+
   /*qui mettiamo tutte le variabili&funzioni necessarie allo sketch , globali in p5js,
   quindi di classe nel componente angular/ionic */
 
@@ -283,7 +313,7 @@ export class HomeComponent implements OnInit {
   palettes;
   rc;
   dragged = null;
-  roots:Elementt[] = [];
+  roots: Elementt[] = [];
   lastClick = 0;
   DOUBLE_CLICKED = false;
   allInputs = [];
@@ -325,12 +355,28 @@ export class HomeComponent implements OnInit {
         found.espanso = !found.espanso;
 
         if (found.espanso) {
-          found._applyChildStartPos(); 
+          found._applyChildStartPos();
         }
-        this.downpaneComponent.identificaElemento(found.label);
+        this.downpaneComponent.identificaElementoSuDownpane(found.label);
         return;
       }
     }
+  }
+
+  public simulateCustomDoubleClick = (label: Elementt) => {
+
+    let found = this.roots.find(elm => elm.label === label) 
+    if (null != found && !found.showInput) {
+
+      found.espanso = !found.espanso;
+
+      if (found.espanso) {
+        found._applyChildStartPos();
+      }
+      this.downpaneComponent.identificaElementoSuDownpane(found.label);
+      return;
+    }
+
   }
 
   private removeById = (id, els) => {
@@ -375,7 +421,9 @@ export class HomeComponent implements OnInit {
     }
   }
 
-   
+
+
+
 
   /*funzione builder oggetto di una classe
   che non e' una classe, ma e' modellato come js plain object

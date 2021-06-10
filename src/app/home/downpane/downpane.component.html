@@ -18,8 +18,9 @@
 
   <!-- <div class="container-fluid"> -->
     <button *ngFor="let elm of elementi" type="button" [ngStyle]="{'border-color': 'white', 'background-color': elm.myColor }" 
-    style="max-width:130px; min-width:130px; margin:1px;  opacity:0.7; font-size:18px;"
-      class="btn-sm float-center" [ngClass]="{selezionato : elm.isDragged}"> {{elm.label}}</button>
+    style="max-width:130px; min-width:130px; margin:1px;  opacity:0.7; font-size:18px; font-weight: bolder;"
+      class="btn-sm float-center" [ngClass]="{selezionato : elm.isDragged}"
+      (click)="clickSuElemento(elm,$event)"> {{elm.label}}</button>
   <!-- </div> -->
 
  

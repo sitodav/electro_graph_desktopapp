@@ -1,5 +1,6 @@
+import { HomeComponent } from './../home.component';
 import { ElementiService } from '../elementiservice/elementi.service';
-import { Component, OnInit, ViewChild } from '@angular/core';
+import { Component, Host, OnInit, ViewChild } from '@angular/core';
 import { NgbAccordion } from '@ng-bootstrap/ng-bootstrap';
 import { Elementt } from '../elementt.class';
 
@@ -15,7 +16,7 @@ export class DownpaneComponent implements OnInit {
   accordion : NgbAccordion;
 
   elementi:Elementt[] = [];
-  constructor(public elementiService : ElementiService) { }
+  constructor(@Host() private parent: HomeComponent,public elementiService : ElementiService) { }
 
   ngOnInit(): void {
     this.elementiService.aggiornatiElementi().subscribe(els => {
@@ -23,11 +24,17 @@ export class DownpaneComponent implements OnInit {
     })
   }
 
-  public identificaElemento(idAcc : string)
+  public identificaElementoSuDownpane(idAcc : string)
   {
     console.log("espando "+idAcc);
     // this.elementi.forEach(elm => {console.log(elm.id)});
     //this.accordion.toggle(idAcc);
+  }
+
+  public clickSuElemento(elm : Elementt,evt)
+  {
+    this.parent.simulateCustomDoubleClick(elm.label);
+    evt.stopPropagation();
   }
 
 }

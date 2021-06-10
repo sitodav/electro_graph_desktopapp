@@ -8,16 +8,18 @@ import { Elementt } from '../elementt.class';
 })
 export class ElementiService {
 
-  public subj : Subject<Elementt[]> = new Subject<Elementt[]>();
+  public subjUpdateElementi : Subject<Elementt[]> = new Subject<Elementt[]>(); 
   constructor() { }
 
   public aggiornaElementi(elements : Elementt[])
   {
-    this.subj.next(elements);
+    this.subjUpdateElementi.next(elements);
   }
 
   public aggiornatiElementi() : Observable<Elementt[]>
   {
-    return this.subj.asObservable();
+    return this.subjUpdateElementi.asObservable();
   }
+
+
 }
