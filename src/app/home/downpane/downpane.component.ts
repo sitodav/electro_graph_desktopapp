@@ -33,7 +33,7 @@ export class DownpaneComponent implements OnInit {
 
   public clickSuElemento(elm : Elementt,evt)
   {
-    this.parent.simulateCustomDoubleClick(elm.label);
+    this.parent.simulateCustomDoubleClick(elm.label,false);
     evt.stopPropagation();
   }
 

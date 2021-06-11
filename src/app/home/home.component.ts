@@ -116,12 +116,11 @@ export class HomeComponent implements OnInit {
       this.ISSHIFT_DOWN = false;
     }
 
-   
+
 
     s.mouseClicked = () => {
-      if(!this.inSketch(s.mouseX,s.mouseY,this.sketchRef))
-      {
-        return ;
+      if (!this.inSketch(s.mouseX, s.mouseY, this.sketchRef)) {
+        return;
       }
       if (this.DOUBLE_CLICKED || this.ININPUT)
         return;
@@ -282,26 +281,23 @@ export class HomeComponent implements OnInit {
   }
 
 
-  private inSketch(mouseX,mouseY,sketchRef) : boolean
-  {
+  private inSketch(mouseX, mouseY, sketchRef): boolean {
     // console.log(mouseX,mouseY,sketchRef.width,sketchRef.height);
     return mouseX < sketchRef.width && mouseY < sketchRef.height;
-    
+
   }
 
-  public espandiTutti = () =>
-  {
+  public espandiTutti = () => {
     for (let elm of this.roots) {
-      if(!elm.espanso)
-        this.simulateCustomDoubleClick(elm.label);
+      if (!elm.espanso)
+        this.simulateCustomDoubleClick(elm.label,true);
     }
   }
 
-  public chiudiTutti = () =>
-  {
+  public chiudiTutti = () => {
     for (let elm of this.roots) {
-      if(elm.espanso)
-        this.simulateCustomDoubleClick(elm.label);
+      if (elm.espanso)
+        this.simulateCustomDoubleClick(elm.label,true);
     }
   }
 
@@ -363,21 +359,6 @@ export class HomeComponent implements OnInit {
     }
   }
 
-  public simulateCustomDoubleClick = (label: Elementt) => {
-
-    let found = this.roots.find(elm => elm.label === label) 
-    if (null != found && !found.showInput) {
-
-      found.espanso = !found.espanso;
-
-      if (found.espanso) {
-        found._applyChildStartPos();
-      }
-      this.downpaneComponent.identificaElementoSuDownpane(found.label);
-      return;
-    }
-
-  }
 
   private removeById = (id, els) => {
 
@@ -422,7 +403,41 @@ export class HomeComponent implements OnInit {
   }
 
 
+   
 
+  public simulateCustomDoubleClick = (label: string, deep : boolean) => {
+
+    let found = this.roots.find(elm => elm.label === label)
+    if (null != found && !found.showInput) {
+
+      found.espanso = !found.espanso;
+
+      if (found.espanso) {
+        found._applyChildStartPos();
+      }
+      if (deep && found.figli != undefined && found.figli.length > 0) {
+        for (let figlio of found.figli) {
+          this.espandi_deep(figlio)
+        }
+      }
+      //this.downpaneComponent.identificaElementoSuDownpane(found.label);
+
+    }
+
+  }
+
+  public espandi_deep = (elm: Elementt) => {
+
+    elm.espanso = true;
+    elm._applyChildStartPos();
+
+    if (elm.figli != undefined && elm.figli.length > 0) {
+      for (let figlio of elm.figli) {
+        this.espandi_deep(figlio)
+      }
+    }
+
+  }
 
 
   /*funzione builder oggetto di una classe
