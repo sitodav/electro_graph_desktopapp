@@ -16,7 +16,7 @@ p {margin-top: 10px; color: rgba(255,255,255,0.4);}
 
 
 body {
-  border: 1px solid #48545c;
+  border: 1px solid #4a81a5;
   overflow-y: hidden;
 }
  
@@ -25,6 +25,7 @@ body {
   height: calc(100% - 32px);
   margin-top: 32px;
   padding: 1px;
+  background-color:#000000;
   overflow-y: auto;
 }
 
@@ -34,9 +35,19 @@ body {
   // margin-left: 32px;
   padding: 2px;
   max-height: 100%;
-  background-color: #48545c;
+  background-color: #4a81a5;
 }
 
+.downWrapper
+{
+  
+  background-color: #4a81a5;
+}
+
+.wholeWrapper
+{
+  background-color: #4a81a5;
+}
 
 
 .selezionato

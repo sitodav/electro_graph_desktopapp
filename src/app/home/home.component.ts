@@ -64,7 +64,7 @@ export class HomeComponent implements OnInit {
     s.setup = () => {
       let canvas2 = s.createCanvas(s.windowWidth - 180, s.windowHeight - 200);
       canvas2.parent('sketch-holder'); //questo lo aggancia al template angular 
-      s.background("#ffffff"); //background come quello del container electron
+      s.background("#4a81a538"); //background come quello del container electron
 
 
       this.lastClick = s.millis();//Math.floor(Date.now() / 1000);
@@ -87,7 +87,7 @@ export class HomeComponent implements OnInit {
         this.customDoubleClick();
         this.DOUBLE_CLICKED = false;
       }
-      s.background("#ffffff");
+      s.background("#000000");
       for (let i in this.roots) {
         this.roots[i]._draw();
       }
@@ -319,7 +319,8 @@ export class HomeComponent implements OnInit {
   button;
 
   initVariabiliGlobaliP5 = () => {
-    this.url = "https://coolors.co/ffadad-ffd6a5-fdffb6-caffbf-9bf6ff-a0c4ff-bdb2ff-ffc6ff-f72585-b5179e-7209b7-560bad-480ca8-3a0ca3-3f37c9-4361ee-4895ef-4cc9f0-f94144-f3722c-f8961e-f9844a-f9c74f-90be6d-43aa8b-4d908e-577590-277da1-f94144-f3722c-f8961e-f9c74f-90be6d-43aa8b-577590-ff595e-ffca3a-8ac926-1982c4-6a4c93";
+    //this.url = "https://coolors.co/ffadad-ffd6a5-fdffb6-caffbf-9bf6ff-a0c4ff-bdb2ff-ffc6ff-f72585-b5179e-7209b7-560bad-480ca8-3a0ca3-3f37c9-4361ee-4895ef-4cc9f0-f94144-f3722c-f8961e-f9844a-f9c74f-90be6d-43aa8b-4d908e-577590-277da1-f94144-f3722c-f8961e-f9c74f-90be6d-43aa8b-577590-ff595e-ffca3a-8ac926-1982c4-6a4c93";
+    this.url = "https://coolors.com/048ba8-5f0f40-1b998b-9a031e-30638e-fb8b24-e36414-1982c4-0f4c5c-d100d1-31572c-fbff12-132a13-ffd6ff-2dc653-ead2ac-208b3a-fdc500-ffff3f-ff0a54-f3722c-43aa8b-660708-6a00f4-8ac926-415a77";
     this.palettes = this.createPalette(this.url);
     this.lastClick = 0; //this.sketchRef.millis();
   }

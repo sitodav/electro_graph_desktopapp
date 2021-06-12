@@ -98,12 +98,12 @@ export class Elementt {
         this.rcRef.circle(0, 0, this.ray, {
             fill: this.myColor,
             seed: 1,
-            stroke: this.figli.length > 0 ? "#000000" : this.myColor,
+            stroke: this.myColor,
         });
-        this.sketchRef.fill(0, 255);
-        this.sketchRef.textSize(12);
-        this.sketchRef.stroke(0, 255);
-        this.sketchRef.text(this.label, 0, 0);
+        this.sketchRef.fill(255, 255);
+        this.sketchRef.textSize(14);
+        this.sketchRef.stroke(255, 255);
+        this.sketchRef.text("          "+this.label, 0, 0);
         this.sketchRef.pop();
     }
 

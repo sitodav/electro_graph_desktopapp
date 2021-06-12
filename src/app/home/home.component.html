@@ -1,5 +1,5 @@
 <app-navbar></app-navbar>
-<div id="main">
+<div id="main" class="wholeWrapper">
     <!--angular split per avere split pane-->
     <as-split direction="vertical" [gutterSize]="1">
         <as-split-area [size]="80">
@@ -24,7 +24,7 @@
 
             <as-split direction="horizontal" [gutterSize]="1">
                 <!--SPLIT PANE SINISTRA-->
-                <as-split-area [size]="90">
+                <as-split-area [size]="90" class="downWrapper">
                     <!--primo split pane-->
                     <app-downpane></app-downpane>
                 </as-split-area>
@@ -32,10 +32,10 @@
                     <!--SPLIT PANE DESTRA-->
                     <button type="button"
                         style="max-width:130px; min-width:130px; margin-left:18px; margin-top:10px; opacity:0.7; font-size:15px; font-weight: bolder;"
-                        type="button" class="btn btn-primary" (click)="espandiTutti()">EXPAND ALL</button>
+                        type="button" class="btn btn-warning" (click)="espandiTutti()">EXPAND ALL</button>
                     <button type="button"
                         style="max-width:130px; min-width:130px; margin-left:18px; margin-top:10px; opacity:0.7; font-size:15px; font-weight: bolder;"
-                        type="button" class="btn btn-primary" (click)="chiudiTutti()">CLOSE ALL</button>
+                        type="button" class="btn btn-warning" (click)="chiudiTutti()">CLOSE ALL</button>
                 </as-split-area>
             </as-split>
 
