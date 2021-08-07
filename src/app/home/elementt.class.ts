@@ -12,6 +12,7 @@ export class Elementt {
     public orderInPadre = 0;
     public showInput = false;
     public input = null;
+    public justInitialized = true;
 
     constructor(public center, public ray, public text, public label,
         public sketchRef, public rcRef, public colorPalettes, public mainClassRef) {

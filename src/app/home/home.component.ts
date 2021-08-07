@@ -351,8 +351,9 @@ export class HomeComponent implements OnInit {
 
         found.espanso = !found.espanso;
 
-        if (found.espanso) {
-          found._applyChildStartPos();
+        if (found.espanso && found.justInitialized) {
+           found._applyChildStartPos();
+           found.justInitialized = false;
         }
         this.downpaneComponent.identificaElementoSuDownpane(found.label);
         return;
@@ -382,14 +383,7 @@ export class HomeComponent implements OnInit {
     this.roots = newRoots;
     this.elementiService.aggiornaElementi(this.roots);
   }
-
-
-  private applyChildStartPositions = () => {
-    for (let i in this.roots) {
-      this.roots[i]._applyChildStartPos();
-    }
-  }
-
+ 
 
   private updateRays = () => {
     for (let i in this.roots) {
@@ -406,22 +400,31 @@ export class HomeComponent implements OnInit {
 
    
 
+  public resetChildsFor = (label: string) => {
+
+    let found = this.roots.find(elm => elm.label === label)
+    if (null != found && !found.showInput) { 
+      if (found.espanso) {
+        found._applyChildStartPos();
+      } 
+
+    }
+
+  }
+
+
   public simulateCustomDoubleClick = (label: string, deep : boolean) => {
 
     let found = this.roots.find(elm => elm.label === label)
     if (null != found && !found.showInput) {
 
-      found.espanso = !found.espanso;
-
-      if (found.espanso) {
-        found._applyChildStartPos();
-      }
+      found.espanso = !found.espanso; 
       if (deep && found.figli != undefined && found.figli.length > 0) {
         for (let figlio of found.figli) {
           this.espandi_deep(figlio)
         }
       }
-      //this.downpaneComponent.identificaElementoSuDownpane(found.label);
+       
 
     }
 
@@ -430,7 +433,7 @@ export class HomeComponent implements OnInit {
   public espandi_deep = (elm: Elementt) => {
 
     elm.espanso = true;
-    elm._applyChildStartPos();
+    //elm._applyChildStartPos();
 
     if (elm.figli != undefined && elm.figli.length > 0) {
       for (let figlio of elm.figli) {
@@ -439,196 +442,6 @@ export class HomeComponent implements OnInit {
     }
 
   }
-
-
-  /*funzione builder oggetto di una classe
-  che non e' una classe, ma e' modellato come js plain object
-  poiche' veniamo da plain javascript.
-  TODO: modellare element come classe typescript 
-  */
-
-
-  // private createElementt = (center, ray, text, label) => {
-  //   if(!this.sketchRef)
-  //   {
-  //     console.log("this.sketchRef is undefined");
-  //     return;
-  //   }
-
-  //   let element:any = {};
-  //   element.center = center;
-  //   element.ray = ray;
-  //   element.text = text;
-  //   element.label = label;
-  //   element.id = Math.random()*50000;
-  //   element.espanso = false;
-  //   element.padre = null;
-  //   element.isRoot = false;
-  //   element.isDragged = false;
-  //   element.internalAngleRotation = 0;
-  //   element.figli = [];
-  //   element.myColor =  this.sketchRef.random(this.palettes);//this.palettes[  Math.floor( Math.random()*this.palettes.length  ) ];
-  //   element.goToCenter = center.copy();
-  //   element.orderInPadre = 0;
-  //   element.showInput = false;
-  //   element.sketchRef = this.sketchRef;
-
-  //   element.input = this.sketchRef.createInput(element.text);
-
-  //   element.input.elt.addEventListener("input", function(event) {
-  //     _this.text = event.target.value; 
-  //   }, false);
-
-  //   element.input.elt.addEventListener("mouseenter", function(event) { 
-  //     this.ININPUT = true; 
-  //   }, false);
-
-  //   element.input.elt.addEventListener("mouseleave", function(event) {
-  //     this.ININPUT = false;
-  //     setTimeout(function() {
-  //       if(!this.ININPUT)
-  //         _this.showInput = false;
-  //     }, 500);
-  //   }, false);
-
-  //   this.allInputs.push(element.input);
-
-
-  //   var _this = element;
-
-  //   element._draw = function() {
-
-  //     //movement
-  //     if (!_this.isDragged)
-  //       _this.center = _this.sketchRef.createVector(_this.center.x + (_this.goToCenter.x - _this.center.x) * 0.1, _this.center.y + (_this.goToCenter.y - _this.center.y) * 0.1);
-
-  //     //hide input as default
-  //     //_this.input.style("opacity:0.1;"); DOES NOT WORK
-  //     _this.input.position(-100, -100);
-
-
-  //     //not to be draw (check to be sure)
-  //     if (null != _this.padre && !_this.padre.espanso)
-  //       return;
-
-  //     if (_this.showInput) {
-  //       _this.input.position(_this.center.x-50, _this.center.y - 10);
-  //       _this.input.style("opacity:0.9;");
-  //       _this.input.style("border-color:rgba(0,0,0,0.4);");
-  //     }
-
-
-
-
-
-
-  //     if (null != _this.padre) {
-
-  //       _this.sketchRef.stroke(_this.padre.myColor);
-
-  //       this.rc.line(_this.padre.center.x, _this.padre.center.y, _this.center.x, _this.center.y,{ 	 
-  //       seed: 1,
-  //       stroke: _this.figli.length > 0 ? "#000000" : _this.myColor  , strokeLineDash: [5,10]});
-  //       /*rc.line(_this.padre.center.x, _this.padre.center.y, _this.center.x, _this.center.y,
-  //               {stroke: _this.padre.myColor,
-  //                strokeWidth : 1,
-  //                bowing : 1});*/
-  //     }
-
-
-  //     if (_this.figli.length > 0 && _this.espanso) {
-  //       for (let i in _this.figli) {
-  //         _this.figli[i]._draw();
-  //       }
-  //     }
-
-  //     _this.sketchRef.push();
-  //     _this.sketchRef.translate(_this.center.x, _this.center.y);
-  //     _this.sketchRef.noFill();
-  //     //stroke(0, 255);
-  //     //ellipseMode(CENTER);
-  //     //stroke(0, 0, 0, 120);
-  //     //fill(_this.myColor);
-  //     //ellipse(0, 0, _this.ray, _this.ray);
-
-  //     this.rc.circle(0, 0, _this.ray, {
-  //       fill: _this.myColor,
-  //       seed: 1,
-  //       stroke: _this.figli.length > 0 ? "#000000" : _this.myColor,
-  //     });
-  //     _this.sketchRef.fill(0, 255);
-  //     _this.sketchRef.textSize(12);
-  //     _this.sketchRef.stroke(0, 255);
-  //     _this.sketchRef.text(_this.text , 0, 0);
-  //     _this.sketchRef.pop();
-  //   }
-
-  //   element._checkMouseIn = function(x, y) {
-  //     if (_this.espanso && _this.figli.length > 0) {
-  //       for (let i in _this.figli) {
-  //         let found = _this.figli[i]._checkMouseIn(x, y);
-  //         if (null != found) {
-  //           return found;
-  //         }
-  //       }
-  //     }
-
-  //     if (_this.sketchRef.createVector(_this.center.x - x, _this.center.y - y).mag() < 0.5 * _this.ray) {
-  //       return _this;
-  //     }
-  //     return null;
-  //   }
-
-
-  //   element._applyChildStartPos = function() {
-
-  //     for (let i in _this.figli) {
-
-  //       let childRay = _this.sketchRef.max(_this.ray, _this.figli[i].figli.length * 25); //map(_this.figli[i].figli.length, 0,5,1.5*_this.ray,20);
-  //       let anglePorz = (_this.figli[i].orderInPadre) * _this.sketchRef.TWO_PI / _this.sketchRef.max(6, _this.figli.length);
-
-  //       _this.figli[i].goToCenter = _this.sketchRef.createVector(_this.goToCenter.x + childRay * _this.sketchRef.cos(anglePorz),
-  //         _this.goToCenter.y + childRay * _this.sketchRef.sin(anglePorz));
-  //       _this.figli[i]._applyChildStartPos();
-  //     }
-  //   }
-
-  //   element._updateRay = function() {
-  //     _this.ray = _this.sketchRef.max(35, 20 * _this.figli.length);
-  //     for (let i in _this.figli) {
-  //       _this.figli[i]._updateRay();
-  //     }
-  //   }
-
-  //   element._giveChildNewColor = function() {
-  //     for (let ifig in _this.figli) {
-  //       _this.figli[ifig]._updateElementClusterColor(_this.myColor);
-  //     }
-  //   }
-
-  //   element._updateElementClusterColor = function(_newColor) {
-  //     _this.myColor = _newColor;
-  //     for (let ifig in _this.figli) {
-  //       _this.figli[ifig]._updateElementClusterColor(_this.myColor);
-  //     }
-  //   }
-
-  //   element._reorderChilds = function() {
-  //     _this.figli.sort((a, b) => {
-  //       if (a.orderInPadre > b.orderInPadre)
-  //         return 1;
-  //       else return -1;
-  //     });
-  //   }
-
-  //   element._printMe = function() {
-  //     console.log(_this.text);
-  //     for (let i in _this.figli) {
-  //       _this.figli[i]._printMe();
-  //     }
-  //   }
-  //   return element;
-  // }
-
+ 
 
 }
