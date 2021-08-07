@@ -142,6 +142,15 @@ export class HomeComponent implements OnInit {
       //this.createElementt(s.createVector(s.mouseX, s.mouseY), 35, "", "");
       newRoot.isRoot = true;
 
+      /*TODO REMOVE */
+      newRoot
+        ._addChild( Elementt._builder(s.createVector(s.mouseX, s.mouseY), 50, "contenuto " + (s.frameCount % 1000),
+        "singolo " + (s.frameCount % 1000), this.sketchRef, this.rc, this.palettes, this))
+        ._addChild2( Elementt._builder(s.createVector(s.mouseX, s.mouseY), 50, "contenuto " + (s.frameCount % 1000),
+        "singolo " + (s.frameCount % 1000), this.sketchRef, this.rc, this.palettes, this))
+        ._addChild( Elementt._builder(s.createVector(s.mouseX, s.mouseY), 50, "contenuto " + (s.frameCount % 1000),
+        "singolo " + (s.frameCount % 1000), this.sketchRef, this.rc, this.palettes, this));
+
       this.roots.push(newRoot);
 
 
@@ -181,12 +190,10 @@ export class HomeComponent implements OnInit {
         let found = this.roots[i]._checkMouseIn(s.mouseX, s.mouseY);
 
         if (null != found) {
-          if (this.ISSHIFT_DOWN) {
-            found.showInput = true;
-          } else {
+         
             this.dragged = found;
             found.isDragged = true;
-          }
+          
 
         }
       }
@@ -199,71 +206,6 @@ export class HomeComponent implements OnInit {
 
 
       if (null != this.dragged) {
-
-        for (let j in this.roots) {
-          let root = this.roots[j];
-          let found = root._checkMouseIn(s.mouseX, s.mouseY);
-          if (null == found || found.isDragged)
-            continue;
-          let target = found;
-
-
-          if (target.figli.length == 0) {
-            target.isRoot = false;
-            this.dragged.isRoot = false;
-            let oldPadreTarget = target.padre;
-            let oldPadreDragged = this.dragged.padre;
-            let newPadre = Elementt._builder(target.center.copy(), 75, "contenuto " + (s.frameCount % 1000),
-              "gruppo " + (s.frameCount % 1000), this.sketchRef, this.rc, this.palettes, this);
-            //this.createElementt(target.center.copy(), 40, "group" + (s.frameCount % 1000), "");
-
-            let oldTargetOrder = target.orderInPadre;
-            target.orderInPadre = 0;
-            target.padre = newPadre;
-            this.dragged.orderInPadre = 1;
-            this.dragged.padre = newPadre;
-            newPadre.figli.push(target);
-            newPadre.figli.push(this.dragged);
-
-
-            if (null != oldPadreTarget) {
-              newPadre.isRoot = false;
-              newPadre.padre = oldPadreTarget;
-              newPadre.espanso = true;
-              this.removeById(target.id, oldPadreTarget.figli);
-              oldPadreTarget.figli.push(newPadre);
-
-              newPadre.orderInPadre = oldTargetOrder;
-              newPadre._applyChildStartPos();
-
-            } else {
-              newPadre.isRoot = true;
-              newPadre.myColor = target.myColor;
-
-              this.roots.push(newPadre);
-            }
-            if (null != oldPadreDragged) {
-              this.removeById(this.dragged.id, oldPadreDragged.figli);
-            }
-
-          } else {
-            this.dragged.isRoot = false;
-            let oldPadreDragged = this.dragged.padre;
-            this.dragged.padre = target;
-            //target.espanso = false;
-            this.dragged.myColor = target.myColor;
-            target.figli.push(this.dragged);
-            this.dragged.orderInPadre = target.figli.length - 1;
-            if (null != oldPadreDragged) {
-              this.removeById(this.dragged.id, oldPadreDragged.figli);
-            }
-            if (target.padre != null)
-              target.padre._applyChildStartPos();
-            else target._applyChildStartPos();
-
-
-          }
-        }
 
         this.dragged.isDragged = false;
         this.dragged = null;
@@ -403,7 +345,7 @@ export class HomeComponent implements OnInit {
   public resetChildsFor = (label: string) => {
 
     let found = this.roots.find(elm => elm.label === label)
-    if (null != found && !found.showInput) { 
+    if (null != found) { 
       if (found.espanso) {
         found._applyChildStartPos();
       } 
@@ -416,7 +358,7 @@ export class HomeComponent implements OnInit {
   public simulateCustomDoubleClick = (label: string, deep : boolean) => {
 
     let found = this.roots.find(elm => elm.label === label)
-    if (null != found && !found.showInput) {
+    if (null != found ) {
 
       found.espanso = !found.espanso; 
       if (deep && found.figli != undefined && found.figli.length > 0) {

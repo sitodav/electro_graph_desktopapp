@@ -10,7 +10,6 @@ export class Elementt {
     public myColor = null;
     public goToCenter = null;
     public orderInPadre = 0;
-    public showInput = false;
     public input = null;
     public justInitialized = true;
 
@@ -54,16 +53,6 @@ export class Elementt {
         //not to be draw (check to be sure)
         if (null != this.padre && !this.padre.espanso)
             return;
-
-        if (this.showInput) {
-            this.input.position(this.center.x - 50, this.center.y - 10);
-            this.input.style("opacity:0.9;");
-            this.input.style("border-color:rgba(0,0,0,0.4);");
-        }
-
-
-
-
 
 
         if (null != this.padre) {
@@ -168,6 +157,18 @@ export class Elementt {
      }
 
 
+    public _addChild = ( child : Elementt ) =>
+    {
+        child.padre = this;
+        this.figli.push(child);
+        return this;
+    }
+
+    public _addChild2 = (child : Elementt ) => 
+    {
+        this._addChild(child);
+        return child;
+    }
  
   
 
